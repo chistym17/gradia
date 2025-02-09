@@ -7,13 +7,16 @@ const submissionSchema = new mongoose.Schema(
       ref: "Assignment",
       required: true,
     },
-    // studentId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User",
-    //   required: true,
-    // },
-    fileUrl: { type: String }, // Optional
-    content: { type: String }, // Add this field for text submissions
+    studentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    student: {
+      type: String,
+      required: true
+    },
+    fileUrl: { type: String },
+    content: { type: String },
   },
   { timestamps: true }
 );

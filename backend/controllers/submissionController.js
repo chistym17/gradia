@@ -4,42 +4,50 @@ import Assignment from "../models/assignmentSchema.js";
 // 📌 Submit an Assignment
 export const submitAssignment = async (req, res) => {
   try {
-    const { studentId, assignmentId, fileUrl, student } = req.body;
+ 
+    
+    const assignmentId = req.params.assignmentId;
+    const { studentId, student, content } = req.body;
 
-    if (!studentId || !assignmentId || !fileUrl || !student) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing required fields" });
-    }
+    console.log("Extracted data:", {
+      assignmentId,
+      studentId,
+      student,
+      content
+    });
 
-    // Ensure the assignment exists
-    const assignmentExists = await Assignment.findById(assignmentId);
-    if (!assignmentExists) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Assignment not found" });
-    }
-
-    // Create the submission (✅ No duplicate)
+    // Create new submission with the data we know we have
     const newSubmission = new Submission({
       assignmentId,
       studentId,
-      fileUrl,
       student,
+      content
     });
 
-    await newSubmission.save();
+    console.log("Created submission object:", newSubmission);
 
-    // Link the submission to the assignment
+    // Save the submission
+    const savedSubmission = await newSubmission.save();
+    console.log("Saved submission:", savedSubmission);
+
+    // Update the assignment
     await Assignment.findByIdAndUpdate(assignmentId, {
-      $push: { submissions: newSubmission._id },
+      $push: { submissions: savedSubmission._id },
     });
 
-    res.status(201).json({ success: true, submission: newSubmission });
+    res.status(201).json({ 
+      success: true, 
+      message: "Submission created successfully",
+      submission: savedSubmission 
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Error submitting assignment", error });
+    console.error("Submission error:", error);
+    console.error("Error details:", error.errors); // Log validation errors if any
+    res.status(500).json({ 
+      success: false, 
+      message: error.message,
+      details: error.errors
+    });
   }
 };
 

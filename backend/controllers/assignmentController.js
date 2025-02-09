@@ -6,17 +6,50 @@ import Submission from "../models/submissionSchema.js"; // ✅ Ensure you use de
 // Create a new assignment (teacher action)
 export const createAssignment = async (req, res) => {
   try {
-    const { title, description, dueDate, course, teacherId } = req.body;
+    console.log("Received assignment data:", req.body);
+    
+    const { title, details, grade } = req.body;
+    const teacherId = req.user?._id || "65a123456789abcdef123456"; // Temporary default teacherId until auth is implemented
+
+    // Validate required fields
+    if (!title || !details || !grade) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide all required fields: title, details, and grade"
+      });
+    }
+
+    // Validate grade range
+    const gradeNum = Number(grade);
+    if (isNaN(gradeNum) || gradeNum < 0 || gradeNum > 100) {
+      return res.status(400).json({
+        success: false,
+        message: "Grade must be a number between 0 and 100"
+      });
+    }
+
     const assignment = await Assignment.create({
       title,
-      description,
-      dueDate,
-      course,
+      details,
+      grade: gradeNum,
       teacherId,
+      submissions: [] // Initialize empty submissions array
     });
-    res.status(201).json({ assignment });
+
+    console.log("Created assignment:", assignment);
+
+    res.status(201).json({
+      success: true,
+      message: "Assignment created successfully",
+      assignment
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error("Error creating assignment:", error);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+      error: error.errors // Include validation errors if any
+    });
   }
 };
 
