@@ -17,7 +17,8 @@ const Sidebar = () => {
 
   // Logout Functionality
   const handleLogout = () => {
-    localStorage.removeItem("studentProfile"); // Clear the saved profile
+    localStorage.removeItem("studentProfile"); 
+    localStorage.removeItem("studentInfo"); 
     navigate("/"); // Redirect to the home page
   };
 

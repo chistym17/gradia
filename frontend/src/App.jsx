@@ -42,7 +42,7 @@ import AssignmentSection from "../src/pages/Teachers/Assignments";
 import CheckAttendanceSection from "../src/pages/Teachers/Attendance";
 import CheckExamSection from "../src/pages/Teachers/Exams";
 import TeacherReviewSection from "./pages/Students/TeacherReviewSection.jsx";
-
+import TeacherSubmissions from "../src/pages/Teachers/Submissions";
 const App = () => {
   return (
     <Router>
@@ -133,6 +133,7 @@ const App = () => {
           path="/teacher/settings"
           element={<TeacherProfileSection />}
         />
+        <Route exact path="/teacher/submissions" element={<TeacherSubmissions />} />
       </Routes>
     </Router>
   );
