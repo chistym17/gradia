@@ -1,52 +1,140 @@
 import Submission from "../models/submissionSchema.js";
 import Assignment from "../models/assignmentSchema.js";
+import multer from "multer";
+import path from "path";
+import fs from 'fs';
+
+// Ensure upload directory exists
+const uploadDir = 'uploads/assignments';
+if (!fs.existsSync(uploadDir)){
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir); // Use the uploadDir constant
+  },
+  filename: function (req, file, cb) {
+    // Create unique filename with original extension
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+// File filter function
+const fileFilter = (req, file, cb) => {
+  // Allow specific file types
+  const allowedTypes = /pdf|doc|docx|txt|jpg|jpeg|png/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
+
+  if (extname && mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only PDF, DOC, DOCX, TXT, JPG, JPEG, and PNG files are allowed!'));
+  }
+};
+
+// Configure multer upload
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+  fileFilter: fileFilter
+}).single('submissionFile'); // 'submissionFile' is the field name in form data
 
 // 📌 Submit an Assignment
 export const submitAssignment = async (req, res) => {
   try {
- 
-    
-    const assignmentId = req.params.assignmentId;
-    const { studentId, student, content } = req.body;
+    upload(req, res, async function(err) {
+      // Handle multer errors
+      if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({
+            success: false,
+            message: "File is too large. Maximum size is 5MB"
+          });
+        }
+        return res.status(400).json({
+          success: false,
+          message: "File upload error",
+          error: err.message
+        });
+      } else if (err) {
+        return res.status(400).json({
+          success: false,
+          message: err.message
+        });
+      }
 
-    console.log("Extracted data:", {
-      assignmentId,
-      studentId,
-      student,
-      content
-    });
+      try {
+        const assignmentId = req.params.assignmentId;
+        const { student, content } = req.body;
 
-    // Create new submission with the data we know we have
-    const newSubmission = new Submission({
-      assignmentId,
-      studentId,
-      student,
-      content
-    });
+        // Validate required fields
+        if (!student || !content) {
+          return res.status(400).json({
+            success: false,
+            message: "Student name and content are required"
+          });
+        }
 
-    console.log("Created submission object:", newSubmission);
+        // Check if assignment exists
+        const assignment = await Assignment.findById(assignmentId);
+        if (!assignment) {
+          return res.status(404).json({
+            success: false,
+            message: "Assignment not found"
+          });
+        }
 
-    // Save the submission
-    const savedSubmission = await newSubmission.save();
-    console.log("Saved submission:", savedSubmission);
+        // Create submission object
+        const submissionData = {
+          assignmentId,
+          student,
+          content,
+          status: "pending"
+        };
 
-    // Update the assignment
-    await Assignment.findByIdAndUpdate(assignmentId, {
-      $push: { submissions: savedSubmission._id },
-    });
+        // Add file information if a file was uploaded
+        if (req.file) {
+          submissionData.fileUrl = `/uploads/assignments/${req.file.filename}`;
+          submissionData.fileName = req.file.originalname;
+        }
 
-    res.status(201).json({ 
-      success: true, 
-      message: "Submission created successfully",
-      submission: savedSubmission 
+        // Create and save submission
+        const submission = new Submission(submissionData);
+        const savedSubmission = await submission.save();
+
+        // Update assignment with submission reference
+        await Assignment.findByIdAndUpdate(
+          assignmentId,
+          { $push: { submissions: savedSubmission._id } }
+        );
+
+        res.status(201).json({
+          success: true,
+          message: "Assignment submitted successfully",
+          submission: savedSubmission
+        });
+
+      } catch (error) {
+        console.error("Submission error:", error);
+        res.status(500).json({
+          success: false,
+          message: "Error processing submission",
+          error: error.message
+        });
+      }
     });
   } catch (error) {
-    console.error("Submission error:", error);
-    console.error("Error details:", error.errors); // Log validation errors if any
-    res.status(500).json({ 
-      success: false, 
-      message: error.message,
-      details: error.errors
+    console.error("Controller error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message
     });
   }
 };

@@ -95,4 +95,6 @@ app.use((req, res, next) => {
 // Error handling middleware (should be at the bottom)
 app.use(errorHandler);
 
+app.use('/uploads', express.static('uploads'));
+
 export default app;
