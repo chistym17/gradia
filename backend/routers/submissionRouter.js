@@ -15,6 +15,6 @@ router.post("/assignments/:assignmentId/submit", submitAssignment);
 router.get("/assignment/:assignmentId", getSubmissionsByAssignment);
 router.get("/getall", getAllSubmissions);
 // ✅ Grade a specific submission
-router.post("/:id/grade", gradeSubmission);
+router.post("/grade/:id", gradeSubmission);
 
 export default router;

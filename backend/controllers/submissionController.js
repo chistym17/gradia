@@ -71,13 +71,13 @@ export const submitAssignment = async (req, res) => {
 
       try {
         const assignmentId = req.params.assignmentId;
-        const { student, content } = req.body;
+        const { student, content, studentId } = req.body;
 
         // Validate required fields
-        if (!student || !content) {
+        if (!student || !content || !studentId) {
           return res.status(400).json({
             success: false,
-            message: "Student name and content are required"
+            message: "Student name, content and studentId are required"
           });
         }
 
@@ -95,6 +95,7 @@ export const submitAssignment = async (req, res) => {
           assignmentId,
           student,
           content,
+          studentId,
           status: "pending"
         };
 
@@ -113,7 +114,7 @@ export const submitAssignment = async (req, res) => {
           assignmentId,
           { $push: { submissions: savedSubmission._id } }
         );
-
+        console.log("Submission saved:", savedSubmission);
         res.status(201).json({
           success: true,
           message: "Assignment submitted successfully",
