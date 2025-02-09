@@ -22,23 +22,42 @@ const ProfileSection = () => {
   });
 
   const [submittedProfile, setSubmittedProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing profile first
-    const savedProfile = localStorage.getItem("studentProfile");
-    if (savedProfile) {
-      setSubmittedProfile(JSON.parse(savedProfile));
-    } else {
-      // If no profile exists, get email from studentInfo
+    fetchStudentProfile();
+  }, []);
+
+  const fetchStudentProfile = async () => {
+    try {
+      // Get email from studentInfo in localStorage
       const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
-      if (studentInfo?.email) {
+      if (!studentInfo?.email) {
+        return;
+      }
+
+      const response = await fetch(
+        `http://localhost:4000/api/v1/students/${studentInfo.email}`
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        // If profile exists, set it as submitted profile
+        setSubmittedProfile(data.student);
+      } else {
+        // If no profile exists, just set the email in the form
         setStudentProfile((prev) => ({
           ...prev,
           email: studentInfo.email,
         }));
       }
+    } catch (error) {
+      console.error("Error fetching student profile:", error);
+      toast.error("Error loading profile data");
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
