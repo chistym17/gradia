@@ -43,6 +43,7 @@ const StudentAssignments = () => {
       const response = await axios.get(
         `http://localhost:4000/api/v1/assignment/${assignmentId}`
       );
+      console.log(response.data.submissions);
       setSubmissions(response.data.submissions || []);
     } catch (error) {
       console.error("Error fetching submissions:", error);
@@ -55,6 +56,7 @@ const StudentAssignments = () => {
       const response = await axios.get(
         "http://localhost:4000/api/v1/submissions/getall"
       );
+      console.log(response.data.submissions);
       setAllSubmissions(response.data.submissions || []);
     } catch (error) {
       console.error("Error fetching all submissions:", error);
@@ -101,6 +103,7 @@ const StudentAssignments = () => {
         formData.append("student", newSubmission.student);
         formData.append("content", newSubmission.content);
         if (file) formData.append("submissionFile", file);
+
 
         await axios.post(
           `http://localhost:4000/api/v1/assignments/${newSubmission.assignmentId}/submit`,
