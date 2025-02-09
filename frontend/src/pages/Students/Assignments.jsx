@@ -21,6 +21,7 @@ const StudentAssignments = () => {
     assignmentId: "",
     student: "",
     content: "",
+    studentId: localStorage.getItem("studentProfile")?._id || "",
   });
   const [file, setFile] = useState(null);
   const [submissions, setSubmissions] = useState([]);
@@ -46,19 +47,6 @@ const StudentAssignments = () => {
     }
   };
 
-  const fetchSubmissions = async (assignmentId) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:4000/api/v1/submissions/assignment/${assignmentId}`
-      );
-      console.log("Fetched submissions:", response.data);
-      setSubmissions(response.data.submissions || []);
-      setShowPreviousSubmissions(true);
-    } catch (error) {
-      console.error("Error fetching submissions:", error);
-      setSubmissions([]);
-    }
-  };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -66,6 +54,12 @@ const StudentAssignments = () => {
 
   const handleAssignmentSubmit = async (e) => {
     e.preventDefault();
+
+    const studentProfile = JSON.parse(localStorage.getItem("studentProfile"));
+    if (!studentProfile || !studentProfile._id) {
+      Swal.fire("Error!", "Student profile not found. Please login again.", "error");
+      return;
+    }
 
     if (!newSubmission.assignmentId || !newSubmission.student || !newSubmission.content) {
       Swal.fire("Error!", "Please fill in all required fields.", "error");
@@ -75,6 +69,7 @@ const StudentAssignments = () => {
     const formData = new FormData();
     formData.append("student", newSubmission.student);
     formData.append("content", newSubmission.content);
+    formData.append("studentId", studentProfile._id);
     if (file) formData.append("submissionFile", file);
 
     try {
@@ -89,7 +84,12 @@ const StudentAssignments = () => {
       );
       console.log("Assignment submitted successfully:", response.data);
       Swal.fire("Success!", "Assignment submitted successfully.", "success");
-      setNewSubmission({ assignmentId: "", student: "", content: "" });
+      setNewSubmission({ 
+        assignmentId: "", 
+        student: "", 
+        content: "",
+        studentId: studentProfile._id 
+      });
       setFile(null);
       if (newSubmission.assignmentId) {
         fetchSubmissions(newSubmission.assignmentId);
