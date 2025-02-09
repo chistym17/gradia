@@ -58,6 +58,7 @@ export const getAllStudents = async (req, res, next) => {
     });
   }
 };
+
 export const updateStudent = async (req, res, next) => {
   const { id } = req.params;
   const updates = req.body;
@@ -86,6 +87,38 @@ export const updateStudent = async (req, res, next) => {
       success: false,
       message: "Internal Server Error",
       error: err.message,
+    });
+  }
+};
+
+export const getStudentByEmail = async (req, res) => {
+  try {
+    const { email } = req.params; // Get email from URL params
+
+    // Find student by email
+    const student = await Student.findOne({ email })
+
+    // If no student found
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: "Student not found with this email",
+      });
+    }
+
+    // Return student data
+    res.status(200).json({
+      success: true,
+      message: "Student information retrieved successfully",
+      student,
+    });
+
+  } catch (error) {
+    console.error("Error in getStudentByEmail:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error retrieving student information",
+      error: error.message,
     });
   }
 };
