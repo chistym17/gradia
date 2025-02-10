@@ -149,3 +149,23 @@ export const deleteTeacherById = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getTeacherByEmail = async (req, res, next) => {
+  const { email } = req.params;
+
+  try {
+    const teacher = await Teacher.findOne({ email });
+    if (!teacher) {
+      return res.status(404).json({
+        success: false,
+        message: "Teacher not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      teacher: teacher,
+    });
+  } catch (err) {
+    next(err);
+  }
+};  
