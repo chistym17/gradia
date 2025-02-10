@@ -17,27 +17,47 @@ const TeacherProfileSection = () => {
     address: "",
     qualification: "",
     gender: "",
-    profileImage: "https://avatar.iran.liara.run/public/boy", // Default to male avatar
+    profileImage: "https://avatar.iran.liara.run/public/boy",
   });
 
   const [submittedProfile, setSubmittedProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing profile first
-    const savedProfile = localStorage.getItem("teacherProfile");
-    if (savedProfile) {
-      setSubmittedProfile(JSON.parse(savedProfile));
-    } else {
-      // If no profile exists, get email from teacherInfo
+    fetchTeacherProfile();
+  }, []);
+
+  const fetchTeacherProfile = async () => {
+    try {
+      // Get email from teacherInfo in localStorage
       const teacherInfo = JSON.parse(localStorage.getItem("teacherInfo"));
-      if (teacherInfo?.email) {
+      if (!teacherInfo?.email) {
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(
+        `http://localhost:4000/api/v1/teachers/${teacherInfo.email}`
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        // If profile exists, set it as submitted profile
+        setSubmittedProfile(data.teacher);
+      } else {
+        // If no profile exists, just set the email in the form
         setTeacherProfile((prev) => ({
           ...prev,
           email: teacherInfo.email,
         }));
       }
+    } catch (error) {
+      console.error("Error fetching teacher profile:", error);
+      toast.error("Error loading profile data");
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,44 +73,30 @@ const TeacherProfileSection = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/api/v1/teachers/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(teacherProfile),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          // Store the complete teacher data including _id from the response
-          console.log("Teacher created successfully:", data.teacher);
-          localStorage.setItem(
-            "teacherProfile",
-            JSON.stringify(data.teacher) // Store the complete teacher object from response
-          );
-          setSubmittedProfile(data.teacher); // Use the response data
-          toast.success("Profile created successfully! 🎉", {
-            duration: 3000,
-            position: "top-center",
-            style: {
-              background: "#4CAF50",
-              color: "#fff",
-              borderRadius: "10px",
-              padding: "16px",
-            },
-          });
-        } else {
-          toast.error(data.message || "Error saving profile.");
-        }
-      })
-      .catch((err) => {
-        console.error("Error submitting teacher data:", err);
-        toast.error("Something went wrong. Please try again.");
+    try {
+      const response = await fetch("http://localhost:4000/api/v1/teachers/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(teacherProfile),
       });
+      
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmittedProfile(data.teacher);
+        toast.success("Profile created successfully! 🎉");
+      } else {
+        toast.error(data.message || "Error saving profile.");
+      }
+    } catch (err) {
+      console.error("Error submitting teacher data:", err);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   const handleEdit = () => {
@@ -99,35 +105,33 @@ const TeacherProfileSection = () => {
     setSubmittedProfile(null);
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const teacherId = teacherProfile._id;
-
-    fetch(`http://localhost:4000/api/v1/teachers/${teacherId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(teacherProfile),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          localStorage.setItem("teacherProfile", JSON.stringify(data.teacher));
-          setSubmittedProfile(data.teacher);
-          toast.success("Profile updated successfully! 🎉", {
-            duration: 3000,
-            position: "top-center",
-          });
-        } else {
-          toast.error(data.message || "Error updating profile.");
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/v1/teachers/${teacherProfile._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(teacherProfile),
         }
-      })
-      .catch((err) => {
-        console.error("Error updating teacher data:", err);
-        toast.error("Something went wrong. Please try again.");
-      });
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmittedProfile(data.teacher);
+        toast.success("Profile updated successfully! 🎉");
+      } else {
+        toast.error(data.message || "Error updating profile.");
+      }
+    } catch (err) {
+      console.error("Error updating teacher data:", err);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
