@@ -86,12 +86,12 @@ const StudentDashboard = () => {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <div className="w-1/4 text-white min-h-screen">
+      <div className="w-1/5 text-white min-h-screen">
         <Sidebar />
       </div>
 
       {/* Main Content */}
-      <div className="w-3/4 p-6 bg-gray-50">
+      <div className="w-4/5 p-6 bg-gray-50">
         <h1 className="text-3xl font-poppins font-semibold text-blue-600 mb-6">
           Student Dashboard
         </h1>

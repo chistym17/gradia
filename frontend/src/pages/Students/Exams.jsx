@@ -101,12 +101,12 @@ const ExamSection = () => {
   return (
     <div className="flex min-h-screen bg-gray-50 font-poppins">
       {/* Sidebar */}
-      <div className="w-1/4 bg-white shadow-lg">
+      <div className="w-1/5 bg-white shadow-lg">
         <Sidebar></Sidebar>
       </div>
 
       {/* Main Content */}
-      <div className="w-3/4 p-8">
+      <div className="w-4/5 p-12">
         <h1 className="text-3xl font-semibold text-blue-500 mb-8">
           Examination Results
         </h1>

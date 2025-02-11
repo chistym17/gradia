@@ -90,12 +90,12 @@ const TeacherReviewSection = () => {
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="w-1/4 bg-white shadow-lg">
+      <div className="w-1/5 bg-white shadow-lg">
         <Sidebar />
       </div>
 
       {/* Main Content */}
-      <div className="w-3/4 p-8">
+      <div className="w-4/5 p-12">
         <h1 className="text-3xl font-poppins font-semibold text-purple-600 mb-8">
           Teacher Reviews
         </h1>

@@ -136,11 +136,11 @@ const TeacherProfileSection = () => {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-      <div className="w-1/4">
+      <div className="w-1/5">
         <Sidebar />
       </div>
 
-      <div className="w-3/4 p-8">
+      <div className="w-4/5 p-12">
         {submittedProfile ? (
           <div className="max-w-3xl mx-auto">
             <div className="bg-white rounded-3xl shadow-2xl p-8 transform transition-all duration-300 hover:scale-[1.01]">
