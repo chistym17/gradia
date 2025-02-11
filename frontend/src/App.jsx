@@ -133,6 +133,7 @@ const App = () => {
           path="/teacher/settings"
           element={<TeacherProfileSection />}
         />
+        <Route exact path="/teacher/classes" element={<ClassSection />} />
         <Route exact path="/teacher/submissions" element={<TeacherSubmissions />} />
       </Routes>
     </Router>

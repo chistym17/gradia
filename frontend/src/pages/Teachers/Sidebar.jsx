@@ -56,12 +56,7 @@ const Sidebar = () => {
           text="Dashboard"
           link="/teacher/dashboard"
         />
-        <SidebarItem
-          isOpen={isOpen}
-          Icon={FaClipboardList}
-          text="Classes"
-          link="/teacher/classes"
-        />
+   
         <SidebarItem
           isOpen={isOpen}
           Icon={FaClipboardList}
