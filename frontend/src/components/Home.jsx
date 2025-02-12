@@ -26,7 +26,7 @@ const Home = () => {
         <div className="flex justify-between items-center px-6 py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <img src={bg1} alt="Gradia Logo" className="h-12" />
+            <img src='/lo.png' alt="Gradia Logo" className="h-12" />
           </div>
 
           {/* Desktop Menu */}

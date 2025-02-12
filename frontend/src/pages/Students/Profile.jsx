@@ -43,6 +43,7 @@ const ProfileSection = () => {
 
       if (data.success) {
         // If profile exists, set it as submitted profile
+        localStorage.setItem("studentProfile", JSON.stringify(data.student));
         setSubmittedProfile(data.student);
       } else {
         // If no profile exists, just set the email in the form

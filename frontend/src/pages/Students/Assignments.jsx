@@ -47,6 +47,17 @@ const StudentAssignments = () => {
     }
   };
 
+  const fetchSubmissions = async (assignmentId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/api/v1/submissions/assignment/${assignmentId}`
+      );
+      setSubmissions(response.data.submissions || []);
+    } catch (error) {
+      console.error("Error fetching submissions:", error);
+      Swal.fire("Error!", "Failed to load submissions.", "error");
+    }
+  };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
