@@ -25,7 +25,7 @@ const Attendance = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/students/getall');
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/students/getall`);
       setStudents(response.data.students);
       initializeAttendanceData(response.data.students);
     } catch (error) {
@@ -56,7 +56,7 @@ const Attendance = () => {
     try {
       // Send attendance data to the database
       const formattedData = attendanceData.map(({ id, name, status }) => ({ studentId: id, name, status }));
-      const response = await axios.post('http://localhost:4000/api/v1/attendance', { attendanceData: formattedData });
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/attendance`, { attendanceData: formattedData });
       console.log('Attendance data submitted:', response.data);
     } catch (error) {
       console.error('Error submitting attendance data:', error);

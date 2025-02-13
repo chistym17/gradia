@@ -27,17 +27,17 @@ const StudentDashboard = () => {
     try {
       // Fetch all assignments
       const assignmentsResponse = await axios.get(
-        "http://localhost:4000/api/v1/assignments/getall"
+        `${import.meta.env.VITE_BASE_URL}/assignments/getall`
       );
 
       // Fetch all submissions to count completed assignments
       const submissionsResponse = await axios.get(
-        "http://localhost:4000/api/v1/submissions/getall"
+        `${import.meta.env.VITE_BASE_URL}/submissions/getall`
       );
 
       // Fetch events
       const eventsResponse = await axios.get(
-        "http://localhost:4000/api/v1/events/getall"
+        `${import.meta.env.VITE_BASE_URL}/events/getall`
       );
 
       setStats({

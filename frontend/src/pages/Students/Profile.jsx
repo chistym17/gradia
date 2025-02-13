@@ -37,7 +37,7 @@ const ProfileSection = () => {
       }
 
       const response = await fetch(
-        `http://localhost:4000/api/v1/students/${studentInfo.email}`
+        `${import.meta.env.VITE_BASE_URL}/students/${studentInfo.email}`
       );
       const data = await response.json();
 
@@ -77,7 +77,7 @@ const ProfileSection = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/api/v1/students/", {
+    fetch(`${import.meta.env.VITE_BASE_URL}/students/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -125,7 +125,7 @@ const ProfileSection = () => {
 
     const studentId = studentProfile._id;
 
-    fetch(`http://localhost:4000/api/v1/students/${studentId}`, {
+    fetch(`${import.meta.env.VITE_BASE_URL}/students/${studentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

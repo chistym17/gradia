@@ -37,7 +37,7 @@ const TeacherProfileSection = () => {
       }
 
       const response = await fetch(
-        `http://localhost:4000/api/v1/teachers/${teacherInfo.email}`
+        `${import.meta.env.VITE_BASE_URL}/teachers/${teacherInfo.email}`
       );
       const data = await response.json();
 
@@ -77,7 +77,7 @@ const TeacherProfileSection = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4000/api/v1/teachers/", {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/teachers/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const TeacherProfileSection = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/teachers/${teacherProfile._id}`,
+        `${import.meta.env.VITE_BASE_URL}/teachers/${teacherProfile._id}`,
         {
           method: "PUT",
           headers: {

@@ -21,7 +21,7 @@ const ExamSection = () => {
   const fetchExams = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/exams/getall"
+        `${import.meta.env.VITE_BASE_URL}/exams/getall`
       );
       setExams(Array.isArray(response.data?.data) ? response.data.data : []);
     } catch (error) {

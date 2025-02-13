@@ -29,7 +29,7 @@ const TeacherSubmissions = () => {
   const fetchSubmissions = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/submissions/getall"
+        `${import.meta.env.VITE_BASE_URL}/submissions/getall`
       );
       setSubmissions(response.data.submissions);
     } catch (error) {
@@ -43,7 +43,7 @@ const TeacherSubmissions = () => {
   const handleGradeSubmission = async (submissionId, grade) => {
     try {
       await axios.post(
-        `http://localhost:4000/api/v1/submissions/grade/${submissionId}`,
+        `${import.meta.env.VITE_BASE_URL}/submissions/grade/${submissionId}`,
         { grade }
       );
       

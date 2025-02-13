@@ -26,7 +26,7 @@ const Assignments = () => {
 
   const fetchAssignments = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/assignments/getall');
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/assignments/getall`);
       setAssignments(response.data.assignments);
     } catch (error) {
       console.error('Error fetching assignments:', error);
@@ -37,7 +37,7 @@ const Assignments = () => {
     e.preventDefault();
     if (newAssignment.title.trim() !== '' && newAssignment.description.trim() !== '' && newAssignment.grade.trim() !== '' && newAssignment.deadline.trim() !== '') {
       try {
-        const response = await axios.post('http://localhost:4000/api/v1/assignments', newAssignment);
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/assignments`, newAssignment);
         // Display success toast message
         toast.success('Assignment added successfully');
         // Add the new assignment to the list

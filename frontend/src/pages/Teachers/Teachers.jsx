@@ -27,7 +27,7 @@ const TeacherSection = () => {
   const fetchTeachers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/teachers/getall"
+        `${import.meta.env.VITE_BASE_URL}/teachers/getall`
       );
       setTeachers(response.data.data);
     } catch (error) {

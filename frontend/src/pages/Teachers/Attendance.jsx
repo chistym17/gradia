@@ -33,7 +33,7 @@ const AttendanceSection = () => {
   const fetchAttendance = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/attendance/getall"
+        `${import.meta.env.VITE_BASE_URL}/attendance/getall`
       );
       const data = response.data.data;
       setAttendanceData(data);

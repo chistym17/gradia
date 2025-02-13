@@ -35,7 +35,7 @@ const AnnouncementSection = () => {
   const fetchAnnouncements = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/announcements/getall"
+        `${import.meta.env.VITE_BASE_URL}/announcements/getall`
       );
       setAnnouncements(response.data.announcements);
     } catch (error) {
@@ -49,7 +49,7 @@ const AnnouncementSection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:4000/api/v1/announcements", formData);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/announcements`, formData);
       Swal.fire("Success!", "Announcement created successfully.", "success");
       setFormData({
         title: "",
@@ -78,7 +78,7 @@ const AnnouncementSection = () => {
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`http://localhost:4000/api/v1/announcements/${id}`);
+        await axios.delete(`${import.meta.env.VITE_BASE_URL}/announcements/${id}`);
         Swal.fire("Deleted!", "Announcement has been deleted.", "success");
         fetchAnnouncements();
       }

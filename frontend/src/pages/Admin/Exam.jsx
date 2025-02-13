@@ -26,7 +26,7 @@ const Exam = () => {
 
   const fetchExams = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/exam/getall');
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/exam/getall`);
       if (Array.isArray(response.data)) {
         setExamData(response.data);
       } else {
@@ -41,7 +41,7 @@ const Exam = () => {
     e.preventDefault();
     const newExam = { name, registrationNumber, className, marks: parseInt(marks) };
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/exam', newExam);
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/exam`, newExam);
       // Ensure response data is always an object
       if (typeof response.data === 'object') {
         setExamData([...examData, response.data]);

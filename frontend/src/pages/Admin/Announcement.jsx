@@ -25,7 +25,7 @@ const Announcement = () => {
   // Function to fetch announcements
   const fetchAnnouncements = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/announcements/getall');
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/announcements/getall`);
       setAnnouncements(response.data.announcements);
     } catch (error) {
       console.error('Error fetching announcements:', error);
@@ -40,7 +40,7 @@ const Announcement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/announcements', {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/announcements`, {
         announcement: announcement, // Ensure that the key matches the backend model
       });
       console.log('Announcement sent:', response.data);

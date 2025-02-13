@@ -13,7 +13,7 @@ const EventSection = () => {
   // Function to fetch events from the backend
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/events/getall');
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/events/getall`);
       setEvents(response.data.events || []);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -29,7 +29,7 @@ const EventSection = () => {
   const addEvent = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/events', {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/events`, {
         event: newEvent,
       });
       setEvents([...events, response.data.event]);

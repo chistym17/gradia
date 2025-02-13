@@ -35,7 +35,7 @@ const StudentAssignments = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/assignments/getall"
+        `${import.meta.env.VITE_BASE_URL}/assignments/getall`
       );
       console.log("Fetched assignments:", response.data);
       setAssignments(response.data.assignments || []);
@@ -50,7 +50,7 @@ const StudentAssignments = () => {
   const fetchSubmissions = async (assignmentId) => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/v1/submissions/assignment/${assignmentId}`
+        `${import.meta.env.VITE_BASE_URL}/submissions/assignment/${assignmentId}`
       );
       setSubmissions(response.data.submissions || []);
     } catch (error) {
@@ -85,7 +85,7 @@ const StudentAssignments = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/v1/submissions/assignments/${newSubmission.assignmentId}/submit`,
+        `${import.meta.env.VITE_BASE_URL}/submissions/assignments/${newSubmission.assignmentId}/submit`,
         formData,
         {
           headers: {

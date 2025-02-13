@@ -22,7 +22,7 @@ const AssignmentSection = () => {
   const fetchAssignments = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/assignments/getall"
+        `${import.meta.env.VITE_BASE_URL}/assignments/getall`
       );
       setAssignments(response.data.assignments);
     } catch (error) {
@@ -43,7 +43,7 @@ const AssignmentSection = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/assignments/create",
+        `${import.meta.env.VITE_BASE_URL}/assignments/create`,
         newAssignment
       );
       setAssignments([...assignments, response.data.assignment]);

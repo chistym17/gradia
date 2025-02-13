@@ -59,7 +59,7 @@ const StudentSection = () => {
   const fetchStudents = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/students/getall"
+        `${import.meta.env.VITE_BASE_URL}/students/getall`
       );
       setStudents(response.data.students);
     } catch (error) {

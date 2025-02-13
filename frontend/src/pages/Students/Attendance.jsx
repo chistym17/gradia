@@ -30,7 +30,7 @@ const StudentAttendance = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/attendance/getall"
+        `${import.meta.env.VITE_BASE_URL}/attendance/getall`
       );
       setAttendanceRecords(response.data.data || []);
     } catch (error) {
@@ -54,7 +54,7 @@ const StudentAttendance = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.post("http://localhost:4000/api/v1/attendance", {
+        await axios.post(`${import.meta.env.VITE_BASE_URL}/attendance`, {
           attendanceData: [newAttendance],
         });
 

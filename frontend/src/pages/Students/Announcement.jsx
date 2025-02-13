@@ -27,7 +27,7 @@ const AnnouncementSection = () => {
   const fetchAnnouncements = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/announcements/getall"
+        `${import.meta.env.VITE_BASE_URL}/announcements/getall`
       );
       setAnnouncements(response.data.announcements);
     } catch (error) {

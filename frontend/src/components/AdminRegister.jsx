@@ -10,7 +10,7 @@ const AdminRegister = () => {
     e.preventDefault(); // Prevent default form submission
   
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/register/admin', { email, password }); 
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/register/admin`, { email, password }); 
       if (response.status === 200) {
         // Registration successful, redirect to admin login
         window.location.href = '/admin-signIn';

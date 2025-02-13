@@ -22,7 +22,7 @@ const TeacherReviewSection = () => {
   const fetchReviews = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/ratings/getall"
+        `${import.meta.env.VITE_BASE_URL}/ratings/getall`
       );
       setReviews(response.data);
     } catch (error) {
@@ -47,7 +47,7 @@ const TeacherReviewSection = () => {
     if (result.isConfirmed) {
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/v1/ratings",
+          `${import.meta.env.VITE_BASE_URL}/ratings`,
           formData
         );
         setReviews([response.data, ...reviews]); // Add new review to the top
