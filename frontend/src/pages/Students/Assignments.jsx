@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { 
-  FaPaperPlane, 
-  FaFile, 
-  FaHistory, 
-  FaChevronDown, 
-  FaUpload, 
-  FaUser, 
+import {
+  FaPaperPlane,
+  FaFile,
+  FaHistory,
+  FaChevronDown,
+  FaUpload,
+  FaUser,
   FaClock,
   FaCheckCircle,
   FaGraduationCap
@@ -50,7 +50,7 @@ const StudentAssignments = () => {
   const fetchSubmissions = async (assignmentId) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/submissions/assignment/${assignmentId}`
+        `${import.meta.env.VITE_BASE_URL}/submissions/getall`
       );
       setSubmissions(response.data.submissions || []);
     } catch (error) {
@@ -95,11 +95,11 @@ const StudentAssignments = () => {
       );
       console.log("Assignment submitted successfully:", response.data);
       Swal.fire("Success!", "Assignment submitted successfully.", "success");
-      setNewSubmission({ 
-        assignmentId: "", 
-        student: "", 
+      setNewSubmission({
+        assignmentId: "",
+        student: "",
         content: "",
-        studentId: studentProfile._id 
+        studentId: studentProfile._id
       });
       setFile(null);
       if (newSubmission.assignmentId) {
@@ -275,9 +275,8 @@ const StudentAssignments = () => {
                   Show Previous Submissions
                 </span>
                 <FaChevronDown
-                  className={`transform transition-transform ${
-                    showPreviousSubmissions ? "rotate-180" : ""
-                  }`}
+                  className={`transform transition-transform ${showPreviousSubmissions ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
