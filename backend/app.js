@@ -5,7 +5,7 @@ import { dbConnection } from "./database/dbConnection.js";
 import studentRouter from "./routers/studentRouter.js";
 import teacherRouter from "./routers/teacherRouter.js";
 import assignmentRouter from "./routers/assignmentRouter.js";
-import submissionRouter from "./routers/submissionRouter.js"; // <-- Added Submission Router
+import submissionRouter from "./routers/submissionRouter.js";
 import announcementRouter from "./routers/announcementRouter.js";
 import classRouter from "./routers/classRouter.js";
 import libraryRouter from "./routers/libraryRouter.js";
@@ -30,7 +30,7 @@ dbConnection();
 
 // ✅ Enhanced CORS Configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL?.trim() || "http://localhost:5173",
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   credentials: true,
